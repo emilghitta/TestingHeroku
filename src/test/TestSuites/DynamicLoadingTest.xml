@@ -1,0 +1,71 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+
+<suite name="DynamicLoading" verbose="1" parallel="tests" thread-count="4">
+    <test name="visibilityTest" >
+
+        <parameter name="browser" value="Firefox"/>
+        <parameter name="testPage" value="http://the-internet.herokuapp.com/dynamic_loading/1"/>
+        <parameter name="expectedMessage" value="Hello World"/>
+        <classes>
+            <class name="com.herokuapp.theinternet.dynamicloadingtests.DynamicLoadingTest">
+                <methods>
+                            <exclude name="renderedAfterTest"/>
+                            <exclude name="elementDomRemoval"/>
+                             <exclude name="disableElementTest"/>
+                </methods>
+            </class>
+        </classes>
+
+    </test>
+
+    <test name="renderedAfterTest" verbose="1">
+        <parameter name="browser" value="Chrome"/>
+        <parameter name="testPage" value="http://the-internet.herokuapp.com/dynamic_loading/2"/>
+        <parameter name="expectedMessage" value="Hello World"/>
+        <classes>
+            <class name="com.herokuapp.theinternet.dynamicloadingtests.DynamicLoadingTest">
+                    <methods>
+                        <exclude name="visibilityTest"/>
+                        <exclude name="elementDomRemoval"/>
+                        <exclude name="disableElementTest"/>
+                    </methods>
+            </class>
+
+        </classes>
+    </test>
+
+    <test name="elementRemoval" verbose="1">
+        <parameter name="browser" value="Firefox"/>
+        <parameter name="testPage" value="http://the-internet.herokuapp.com/dynamic_controls"/>
+        <parameter name="expectedGoneMessage" value="It's gone!"/>
+        <parameter name="expectedBackMessage" value="It's back!"/>
+        <classes>
+            <class name="com.herokuapp.theinternet.dynamicloadingtests.DynamicLoadingTest">
+                <methods>
+                    <include name="elementDomRemoval"/>
+                    <exclude name="renderedAfterTest"/>
+                    <exclude name="visibilityTest"/>
+                    <exclude name="disableElementTest"/>
+                </methods>
+            </class>
+
+        </classes>
+    </test>
+
+    <test name="disableElementTest" verbose="1">
+        <parameter name="browser" value="Chrome"/>
+        <parameter name="testPages" value="http://the-internet.herokuapp.com/dynamic_controls"/>
+        <parameter name="textIntoField" value="Test"/>
+        <classes>
+            <class name="com.herokuapp.theinternet.dynamicloadingtests.DynamicLoadingTest">
+                <methods>
+                    <exclude name="elementDomRemoval"/>
+                    <exclude name="renderedAfterTest"/>
+                    <exclude name="visibilityTest"/>
+                    <include name="disableElementTest"/>
+                 </methods>
+            </class>
+        </classes>
+    </test>
+
+</suite>
