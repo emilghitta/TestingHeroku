@@ -4,36 +4,33 @@ import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-public class WelcomePageObject {
-        private WebDriver driver;
-        private Logger log;
+public class WelcomePageObject extends BasePageObject{
         private String pageURL = "http://the-internet.herokuapp.com/";
         private By pageMainTitle = By.className("heading");
         private By subHeading = By.xpath("//div[@id='content']/h2");
         private By formAuthenticationLinkLocator = By.linkText("Form Authentication");
+        private By dynamicLoadingLinkLocator = By.linkText("Dynamic Loading");
 
 
         public WelcomePageObject(WebDriver driver, Logger log){
-            this.driver = driver;
-            this.log = log;
+            super(driver,log);
         }
 
-
         public void openPage(){
-            log.info("Opening the page");
-            driver.get(pageURL);
+            log.info("Opening the Welcome page");
+            openPage(pageURL);
         }
 
         public LoginPageObject clickFormAuthenticationLink(){
             log.info("Clicking Form Authentication link on Welcome page");
-            driver.findElement(formAuthenticationLinkLocator).click();
+            click(formAuthenticationLinkLocator);
             return new LoginPageObject(driver,log);
         }
 
-        public String getElementText(By element){
-            log.info("Getting Element text");
-            return driver.findElement(element).getText();
+        public DynamicLoadingPageObject clickDynamicLoadingLink(){
+            log.info("Clicking Dynamic Loading link on Welcome page");
+            click(dynamicLoadingLinkLocator);
+            return new DynamicLoadingPageObject(driver,log);
         }
-
 
 }

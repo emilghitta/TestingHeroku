@@ -6,6 +6,7 @@
         <parameter name="username" value="tomsmith"/>
         <parameter name="password" value="SuperSecretPassword!"/>
         <parameter name="expectedSuccessMessage" value="You logged into a secure area!"/>
+        <parameter name="expectedPageURL" value="http://the-internet.herokuapp.com/secure" />
 
         <groups>
             <run>
@@ -23,6 +24,7 @@
         <parameter name="username" value="Test"/>
         <parameter name="password" value="SuperSecretPassword!"/>
         <parameter name="expectedErrorMessage" value="Your username is invalid!"/>
+        <parameter name="expectedPageURL" value="http://the-internet.herokuapp.com/login"/>
 
         <groups>
             <run>
@@ -40,6 +42,7 @@
         <parameter name="username" value="tomsmith"/>
         <parameter name="password" value="Test"/>
         <parameter name="expectedErrorMessage" value="Your password is invalid!"/>
+        <parameter name="expectedPageURL" value="http://the-internet.herokuapp.com/login"/>
 
         <groups>
             <run>
