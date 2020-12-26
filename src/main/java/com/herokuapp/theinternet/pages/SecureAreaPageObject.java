@@ -5,7 +5,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 public class SecureAreaPageObject extends BasePageObject{
-    private String pageURL = "http://the-internet.herokuapp.com/login/secure";
     private By loggedInMessage = By.id("flash");
     private By closeLoggedInMessage = By.className("close");
     private By pageMainTitle = By.xpath("//div[@class='example']/h2");

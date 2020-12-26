@@ -1,8 +1,6 @@
 package com.herokuapp.theinternet.dynamicloadingtests;
 import com.herokuapp.theinternet.base.BaseTest;
-import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import com.herokuapp.theinternet.pages.*;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
@@ -14,120 +12,126 @@ public class DynamicLoadingTest extends BaseTest {
         public void visibilityTest(String testPage,String expectedMessage){
 
             //Open the Webpage
-            driver.get(testPage);
+            WelcomePageObject welcomePage = new WelcomePageObject(driver, log);
+            welcomePage.openPage(testPage);
+
+            DynamicLoadingPageObject dynamicTest = welcomePage.clickDynamicLoadingLink();
+
+            DynamicLoading1PageObject dynamicLoading1 = dynamicTest.clickExample1Link();
 
             //Click the start Button
-            WebElement startButton = driver.findElement(By.xpath("//div[@id='start']/button"));
-            startButton.click();
+            dynamicLoading1.clickStartButton();
 
             //Assert that "Hello World" message is displayed.
-            WebElement finishMessage = driver.findElement(By.id("finish"));
-
-              WebDriverWait wait = new WebDriverWait(driver, 6);
-                  wait.until(ExpectedConditions.visibilityOf(finishMessage));
+            Assert.assertTrue(dynamicLoading1.isFinishMessageVisible(),"The finish message is not visible");
 
 
             //Assert that the correct message is displayed.
-            String actualMessage = finishMessage.getText();
-            Assert.assertTrue(actualMessage.contains(expectedMessage),"Incorrect message is displayed. Expected to recevie Hello World");
+            Assert.assertTrue(dynamicLoading1.getFinishMessageText().contains(expectedMessage),"Expected: " + expectedMessage + " but found: " + dynamicLoading1.getFinishMessageText());
 
     }
 
     @Parameters({"testPage","expectedMessage"})
     @Test(priority = 2)
         public void renderedAfterTest(String testPage,String expectedMessage){
+
         //Open Webpage
-        driver.get(testPage);
+        WelcomePageObject welcomePage = new WelcomePageObject(driver,log);
+        welcomePage.openPage(testPage);
+        DynamicLoadingPageObject dynamicTest = welcomePage.clickDynamicLoadingLink();
+        DynamicLoading2PageObject dynamicLoading2 = dynamicTest.clickExample2Link();
 
         //Click the start button
-        WebElement startButton = driver.findElement(By.xpath("//div[@id='start']/button"));
-        startButton.click();
+        dynamicLoading2.clickStartButton();
 
         //Wait and Assert that the correct finish message is displayed
+        Assert.assertTrue(dynamicLoading2.finishMessagePresent(expectedMessage),"The expectedMessage is not visible");
 
-        WebDriverWait wait = new WebDriverWait(driver,10);
-        Assert.assertTrue(
-                wait.until(ExpectedConditions.textToBePresentInElementLocated(By.id("finish"),"Hello World")), "Couldn't find the expected message"
-        );
+        Assert.assertTrue(dynamicLoading2.getFinishMessageText().contains(expectedMessage),"Expected: " + expectedMessage + " but found " + dynamicLoading2.getFinishMessageText());
+
+
     }
 
     @Parameters({"testPage","expectedGoneMessage","expectedBackMessage"})
     @Test(priority = 2)
     public void elementDomRemoval(String testPage, String expectedGoneMessage,String expectedBackMessage){
-        WebDriverWait wait = new WebDriverWait(driver,10);
-            //Open the webpage
-        driver.get(testPage);
 
-        //Create checkbox element
-        WebElement checkbox = driver.findElement(By.id("checkbox"));
+            //Open the webpage
+        WelcomePageObject welcomePage = new WelcomePageObject(driver,log);
+        welcomePage.openPage(testPage);
+        DynamicControlsPageObject dynamicControls = welcomePage.clickDynamicControlsLink();
+
+        // Assert that the button text is "Remove"
+        Assert.assertTrue(dynamicControls.getButtonText().contains("Remove")); //Hardcoded !
+
+        //Check de checkbox & Verify that the checkbox is checked.
+        dynamicControls.clickCheckBox();
+
+        Assert.assertTrue(dynamicControls.isCheckboxChecked(),"The checkbox is not checked. It should be!");
+
 
         //Click the remove button
-        WebElement removeButton = driver.findElement(By.xpath("//form[@id='checkbox-example']/button"));
-        removeButton.click();
+        dynamicControls.clickRemoveButton();
 
         //Assert that the checkbox has been removed successfully from the DOM
-        //Assert.assertTrue( wait.until(ExpectedConditions.invisibilityOf(checkbox)),"Checkbox is still visible, but should not be");
-        Assert.assertTrue(wait.until(ExpectedConditions.stalenessOf(checkbox)),"Checkbox is still present");
+        Assert.assertTrue(dynamicControls.checkForCheckBoxStaleness());
 
         //Assert that the It's gone message is displayed.
-        WebElement message = driver.findElement(By.id("message"));
-        String messageText = message.getText();
+        Assert.assertTrue(dynamicControls.getMessageText().contains(expectedGoneMessage),"Expected: " + expectedGoneMessage + " but found: " +dynamicControls.getMessageText());
 
-        Assert.assertTrue(messageText.contains(expectedGoneMessage));
+        //Assert that the the button text is "Add"
+        Assert.assertTrue(dynamicControls.getButtonText().contains("Add")); //Hardcoded!
 
         //Click on the Add button
-        WebElement addButton = driver.findElement(By.xpath("//form[@id='checkbox-example']/button"));
-        addButton.click();
+        dynamicControls.clickRemoveButton();
 
         //Assert that the It's back message is displayed. We are re-assignin the message WebElement because it has become stale after clicking the add button
-        message = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("message")));
-        messageText = message.getText();
+        Assert.assertTrue(dynamicControls.getMessageText().contains(expectedBackMessage));
+        //message = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("message")));
 
-        Assert.assertTrue(messageText.contains(expectedBackMessage));
+        //Click the second checkbox and assert that the second checkbox is checked
+        dynamicControls.clickBackCheckbox();
+        Assert.assertTrue(dynamicControls.isReturnedCheckboxChecked(),"The checkbox is not checked. It should be!");
 
         //Assert that the checkbox is back again
-        checkbox = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("checkbox")));
-
-        Assert.assertTrue(checkbox.isDisplayed(),"Checkbox is not displayed but it should be");
+        Assert.assertTrue(dynamicControls.isCheckboxDisplayed(),"Checkbox is not displayed but it should be");
     }
 
-    @Parameters({"testPages","textIntoField"})
+    @Parameters({"testPages","textIntoField","expectedEnabledMessage","expectedDisabledMessage", "inputCheckbox"})
     @Test(priority = 0)
-    public void disableElementTest(String testPages, String textIntoField){
+    public void disableElementTest(String testPages, String textIntoField, String expectedEnabledMessage, String expectedDisabledMessage, String inputCheckbox){
 
-        WebDriverWait wait = new WebDriverWait(driver,10);
-        driver.get(testPages);
+        WelcomePageObject welcomePage = new WelcomePageObject(driver,log);
+        welcomePage.openPage(testPages);
 
-        WebElement enable = driver.findElement(By.xpath("//form[@id='input-example']/button"));
-        WebElement inputField = driver.findElement(By.xpath("//form[@id='input-example']/input"));
+        DynamicControlsPageObject dynamicControls = welcomePage.clickDynamicControlsLink();
 
         //Verify if the input field is disabled by default
-        Assert.assertFalse(inputField.isEnabled(),"Text field is not disabled by default and it should be");
+        Assert.assertFalse(dynamicControls.isCheckboxEnabled(),"The checkbox should be disabled by default");
 
         //Click on the Enable button
-        enable.click();
+        dynamicControls.clickEnableDisableButton();
 
-        //Verify if the input field i enabled after click
+        //Verify if the input field is enabled after click
         //Type something inside the field
-        wait.until(ExpectedConditions.elementToBeClickable(inputField)).sendKeys(textIntoField);
+        Assert.assertTrue(dynamicControls.isCheckboxEnabled(),"The checkbox should be enabled");
 
         //Verify that the Message is displayed
-        WebElement enabledMessage = driver.findElement(By.id("message"));
-        Assert.assertTrue(enabledMessage.isDisplayed());
+        Assert.assertTrue(dynamicControls.getMessageText().contains(expectedEnabledMessage));
 
         //Verify if the text is the same that you wrote inside the field
         //For inputs we need to get the value attribute not the text
-        String inputFormText = inputField.getAttribute("value");
-        Assert.assertTrue(inputFormText.contains(textIntoField));
+        dynamicControls.sendKeysToInput(inputCheckbox);
+        Assert.assertTrue(dynamicControls.getInputValue().contains(inputCheckbox));
 
         //Click the disable button
-        enable.click();
+        dynamicControls.clickEnableDisableButton();
 
-        enabledMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("message")));
-
+        //Verify that the It's disabled! message is displayed
+        Assert.assertTrue(dynamicControls.getMessageText().contains(expectedDisabledMessage));
 
         //Verify if the input field is disabled We could use an Implicit time!
-        Assert.assertFalse(inputField.isEnabled());
+        Assert.assertFalse(dynamicControls.isCheckboxEnabled(),"The input field should be disabled");
         
 
 

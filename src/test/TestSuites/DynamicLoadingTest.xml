@@ -4,7 +4,7 @@
     <test name="visibilityTest" >
 
         <parameter name="browser" value="Firefox"/>
-        <parameter name="testPage" value="http://the-internet.herokuapp.com/dynamic_loading/1"/>
+        <parameter name="testPage" value="http://the-internet.herokuapp.com/"/>
         <parameter name="expectedMessage" value="Hello World"/>
         <classes>
             <class name="com.herokuapp.theinternet.dynamicloadingtests.DynamicLoadingTest">
@@ -20,7 +20,7 @@
 
     <test name="renderedAfterTest" verbose="1">
         <parameter name="browser" value="Chrome"/>
-        <parameter name="testPage" value="http://the-internet.herokuapp.com/dynamic_loading/2"/>
+        <parameter name="testPage" value="http://the-internet.herokuapp.com/"/>
         <parameter name="expectedMessage" value="Hello World"/>
         <classes>
             <class name="com.herokuapp.theinternet.dynamicloadingtests.DynamicLoadingTest">
@@ -36,7 +36,7 @@
 
     <test name="elementRemoval" verbose="1">
         <parameter name="browser" value="Firefox"/>
-        <parameter name="testPage" value="http://the-internet.herokuapp.com/dynamic_controls"/>
+        <parameter name="testPage" value="http://the-internet.herokuapp.com/"/>
         <parameter name="expectedGoneMessage" value="It's gone!"/>
         <parameter name="expectedBackMessage" value="It's back!"/>
         <classes>
@@ -54,8 +54,11 @@
 
     <test name="disableElementTest" verbose="1">
         <parameter name="browser" value="Chrome"/>
-        <parameter name="testPages" value="http://the-internet.herokuapp.com/dynamic_controls"/>
+        <parameter name="testPages" value="http://the-internet.herokuapp.com/"/>
         <parameter name="textIntoField" value="Test"/>
+        <parameter name="expectedEnabledMessage" value="It's enabled!"/>
+        <parameter name="expectedDisabledMessage" value="It's disabled!"/>
+        <parameter name="inputCheckbox" value="This is just a test"/>
         <classes>
             <class name="com.herokuapp.theinternet.dynamicloadingtests.DynamicLoadingTest">
                 <methods>

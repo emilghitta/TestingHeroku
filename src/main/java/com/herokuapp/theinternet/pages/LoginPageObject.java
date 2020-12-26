@@ -4,7 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 public class LoginPageObject extends BasePageObject{
-    private String pageURL = "http://the-internet.herokuapp.com/login";
+
     private By invalidErrorMessage = By.id("flash");
     private By pageMainTitle = By.xpath("//div[@class='example']/h2");
     private By welcomeMessage = By.className("subheader");
@@ -16,10 +16,6 @@ public class LoginPageObject extends BasePageObject{
         super(driver,log);
     }
 
-    public void openPage(){
-        log.info("Opening page");
-        openPage(pageURL);
-    }
 
     public SecureAreaPageObject logIn(String username, String password){
         log.info("Executing log in with username: " + username + " and password: " + password);

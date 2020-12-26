@@ -8,15 +8,15 @@ import org.testng.annotations.*;
 
 public class LoginTests extends TestUtilities {
 
-    @Parameters({"username","password","expectedSuccessMessage","expectedPageURL"})
+    @Parameters({"testPage","username","password","expectedSuccessMessage","expectedPageURL"})
     @Test(priority = 0 , groups = {"positiveTests", "smokeTests"})
-    public void positiveLoginTest(String username, String password, String expectedSuccessMessage, String expectedPageURL){
+    public void positiveLoginTest(String testPage ,String username, String password, String expectedSuccessMessage, String expectedPageURL){
 
 
         //   1. Open Test page.
         WelcomePageObject welcomepage = new WelcomePageObject(driver,log);
 
-        welcomepage.openPage();
+        welcomepage.openPage(testPage);
         LoginPageObject loginpage = welcomepage.clickFormAuthenticationLink();
 
 
@@ -41,15 +41,15 @@ public class LoginTests extends TestUtilities {
 
     }
 
-    @Parameters({"username","password","expectedErrorMessage", "expectedPageURL"})
+    @Parameters({"testPage","username","password","expectedErrorMessage", "expectedPageURL"})
     @Test(priority = 1, groups = {"negativeTests", "smokeTests"})
-    public void negativeLoginTest(String username, String password, String expectedErrorMessage, String expectedPageURL){
+    public void negativeLoginTest(String testPage,String username, String password, String expectedErrorMessage, String expectedPageURL){
 
 
         // 1. Access the Login Page.
         log.info("Open the test url");
         WelcomePageObject welcome = new WelcomePageObject(driver, log);
-        welcome.openPage();
+        welcome.openPage(testPage);
         LoginPageObject loginPage = welcome.clickFormAuthenticationLink();
 
         // 2. Input username, password and click log in.

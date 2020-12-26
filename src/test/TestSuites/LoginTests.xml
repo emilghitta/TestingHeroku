@@ -3,6 +3,7 @@
 <suite name="LoginTests" verbose="1" parallel="tests" thread-count="3">
     <test name="PositiveLoginTest" >
         <parameter name="browser" value="Chrome"/>
+        <parameter name="testPage" value="http://the-internet.herokuapp.com/"/>
         <parameter name="username" value="tomsmith"/>
         <parameter name="password" value="SuperSecretPassword!"/>
         <parameter name="expectedSuccessMessage" value="You logged into a secure area!"/>
@@ -21,6 +22,7 @@
 
     <test name="NegativeUsernameTest">
         <parameter name="browser" value="Firefox"/>
+        <parameter name="testPage" value="http://the-internet.herokuapp.com/"/>
         <parameter name="username" value="Test"/>
         <parameter name="password" value="SuperSecretPassword!"/>
         <parameter name="expectedErrorMessage" value="Your username is invalid!"/>
@@ -39,6 +41,7 @@
 
     <test name="NegativePasswordTest">
         <parameter name="browser" value="Firefox"/>
+        <parameter name="testPage" value="http://the-internet.herokuapp.com/"/>
         <parameter name="username" value="tomsmith"/>
         <parameter name="password" value="Test"/>
         <parameter name="expectedErrorMessage" value="Your password is invalid!"/>
